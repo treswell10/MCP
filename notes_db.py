@@ -1,3 +1,5 @@
+"""SQLite persistence for notes used by the CLI and the MCP server."""
+
 import sqlite3
 from contextlib import closing
 from pathlib import Path
@@ -6,6 +8,7 @@ DB_PATH = Path(__file__).resolve().with_name("notes.db")
 
 
 def _connect() -> sqlite3.Connection:
+    """Open notes.db, create the notes table if needed, and return a row-factory connection."""
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -23,6 +26,7 @@ def _connect() -> sqlite3.Connection:
 
 
 def add_note(content: str) -> dict:
+    """Insert a note and return its id, content, and created_at. Raises ValueError if content is empty."""
     content = content.strip()
     if not content:
         raise ValueError("Note content cannot be empty.")
@@ -40,6 +44,7 @@ def add_note(content: str) -> dict:
 
 
 def list_notes() -> list[dict]:
+    """Return all notes as dicts, newest first."""
     with closing(_connect()) as conn, conn:
         rows = conn.execute(
             "SELECT id, content, created_at FROM notes ORDER BY id DESC"
@@ -48,6 +53,7 @@ def list_notes() -> list[dict]:
 
 
 def delete_note(note_id: int) -> bool:
+    """Delete the note with this id. Return True if a row was deleted."""
     with closing(_connect()) as conn, conn:
         cursor = conn.execute("DELETE FROM notes WHERE id = ?", (note_id,))
         return cursor.rowcount > 0
