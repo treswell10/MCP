@@ -1,0 +1,7 @@
+python notes_db.py add Treswell Kgoedi
+python notes_db.py list
+python notes_db.py delete 2
+
+
+notes
+#https://code.visualstudio.com/docs/copilot/customization/mcp-servers
