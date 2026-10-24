@@ -51,26 +51,3 @@ def delete_note(note_id: int) -> bool:
     with closing(_connect()) as conn, conn:
         cursor = conn.execute("DELETE FROM notes WHERE id = ?", (note_id,))
         return cursor.rowcount > 0
-
-
-if __name__ == "__main__":
-    import json
-    import sys
-
-    usage = "Usage: python notes_db.py add <text> | list | delete <id>"
-    if len(sys.argv) < 2:
-        raise SystemExit(usage)
-
-    command = sys.argv[1]
-    if command == "add":
-        if len(sys.argv) < 3:
-            raise SystemExit(usage)
-        print(json.dumps(add_note(" ".join(sys.argv[2:]))))
-    elif command == "list":
-        print(json.dumps(list_notes(), indent=2))
-    elif command == "delete":
-        if len(sys.argv) < 3:
-            raise SystemExit(usage)
-        print(json.dumps(delete_note(int(sys.argv[2]))))
-    else:
-        raise SystemExit(usage)

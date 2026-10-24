@@ -1,6 +1,6 @@
-python notes_db.py add Treswell Kgoedi
-python notes_db.py list
-python notes_db.py delete 2
+python main.py add Treswell Kgoedi
+python main.py list
+python main.py delete 2
 
 
 notes
